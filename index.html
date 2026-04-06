@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Momentum Tasks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="background-glow" aria-hidden="true"></div>
+
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Daily Planner</p>
+          <h1>Momentum Tasks</h1>
+        </div>
+        <p id="live-date" class="live-date"></p>
+      </header>
+
+      <section class="composer">
+        <form id="todo-form" class="composer-form" autocomplete="off">
+          <label class="sr-only" for="todo-input">Task title</label>
+          <input id="todo-input" name="title" type="text" maxlength="120" placeholder="Add a task..." required />
+
+          <label class="sr-only" for="priority-input">Priority</label>
+          <select id="priority-input" name="priority" aria-label="Priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+
+          <button type="submit">Add Task</button>
+        </form>
+      </section>
+
+      <section class="toolbar" aria-label="Task controls">
+        <div id="filters" class="filters" role="tablist" aria-label="Task filter">
+          <button class="filter is-active" data-filter="all" type="button">All</button>
+          <button class="filter" data-filter="active" type="button">Active</button>
+          <button class="filter" data-filter="completed" type="button">Completed</button>
+        </div>
+
+        <div class="search-wrap">
+          <label class="sr-only" for="search-input">Search tasks</label>
+          <input id="search-input" type="search" placeholder="Search tasks" />
+        </div>
+      </section>
+
+      <section class="list-panel">
+        <ul id="task-list" class="task-list" aria-live="polite"></ul>
+        <p id="empty-state" class="empty-state">No tasks yet. Add your first one above.</p>
+      </section>
+
+      <footer class="app-footer">
+        <p id="stats">0 tasks</p>
+        <button id="clear-completed" type="button" class="ghost-btn">Clear Completed</button>
+      </footer>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
+
