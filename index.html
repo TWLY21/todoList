@@ -1,70 +1,150 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Momentum Tasks</title>
+    <title>System Quest Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="background-glow" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
 
-    <main class="app-shell">
-      <header class="app-header">
+    <main class="system-app">
+      <header class="system-header panel">
         <div>
-          <p class="eyebrow">Daily Planner</p>
-          <h1>Momentum Tasks</h1>
+          <p class="module-tag">System Interface</p>
+          <h1>Quest Productivity Console</h1>
+          <p class="subtitle">Track missions, gain EXP, and unlock achievements.</p>
         </div>
-        <p id="live-date" class="live-date"></p>
+
+        <div class="header-status">
+          <p id="live-date" class="live-date"></p>
+          <p id="rank-label" class="rank-badge">E Rank</p>
+          <div class="header-actions">
+            <button id="sound-toggle" type="button" class="header-btn" aria-label="Toggle sound">
+              Sound: On
+            </button>
+            <p class="shortcut-hint">Shortcuts: <kbd>/</kbd> search <kbd>N</kbd> new</p>
+          </div>
+        </div>
       </header>
 
-      <section class="composer">
-        <form id="todo-form" class="composer-form" autocomplete="off">
-          <label class="sr-only" for="todo-input">Task title</label>
-          <input id="todo-input" name="title" type="text" maxlength="120" placeholder="Add a task..." required />
+      <section class="status-grid">
+        <article class="panel stat-panel">
+          <p class="module-tag">Hunter Profile</p>
+          <p class="stat-value">Level <span id="level-value">1</span></p>
+          <p id="exp-label" class="stat-sub">0 / 100 EXP</p>
+          <div class="exp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="exp-fill" class="exp-fill"></div>
+          </div>
+        </article>
 
-          <label class="sr-only" for="priority-input">Priority</label>
-          <select id="priority-input" name="priority" aria-label="Priority">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
+        <article class="panel stat-panel">
+          <p class="module-tag">Streak Engine</p>
+          <p class="stat-value"><span id="current-streak">0</span> day streak</p>
+          <p class="stat-sub">Longest: <span id="longest-streak">0</span> day(s)</p>
+        </article>
+
+        <article class="panel stat-panel">
+          <p class="module-tag">Mission Summary</p>
+          <p class="stat-value"><span id="active-count">0</span> active</p>
+          <p class="stat-sub"><span id="completed-count">0</span> cleared | <span id="overdue-count">0</span> overdue</p>
+        </article>
+      </section>
+
+      <section class="panel composer-panel">
+        <h2 class="section-title">New Mission</h2>
+        <form id="quest-form" class="quest-form" autocomplete="off">
+          <label class="sr-only" for="quest-input">Mission title</label>
+          <input id="quest-input" name="title" type="text" maxlength="120" placeholder="Enter mission objective..." required />
+
+          <label class="sr-only" for="difficulty-input">Difficulty</label>
+          <select id="difficulty-input" name="difficulty" aria-label="Difficulty">
+            <option value="easy">Easy (5 EXP)</option>
+            <option value="medium" selected>Medium (10 EXP)</option>
+            <option value="hard">Hard (20 EXP)</option>
           </select>
 
-          <button type="submit">Add Task</button>
+          <label class="sr-only" for="due-input">Due date</label>
+          <input id="due-input" name="dueDate" type="date" aria-label="Due date" />
+
+          <button type="submit">Deploy Mission</button>
         </form>
       </section>
 
-      <section class="toolbar" aria-label="Task controls">
-        <div id="filters" class="filters" role="tablist" aria-label="Task filter">
+      <section class="panel controls-panel" aria-label="Quest controls">
+        <div id="filters" class="filters" role="tablist" aria-label="Quest filter">
           <button class="filter is-active" data-filter="all" type="button">All</button>
           <button class="filter" data-filter="active" type="button">Active</button>
-          <button class="filter" data-filter="completed" type="button">Completed</button>
+          <button class="filter" data-filter="completed" type="button">Cleared</button>
+          <button class="filter" data-filter="today" type="button">Today</button>
+          <button class="filter" data-filter="upcoming" type="button">Upcoming</button>
         </div>
 
-        <div class="search-wrap">
-          <label class="sr-only" for="search-input">Search tasks</label>
-          <input id="search-input" type="search" placeholder="Search tasks" />
+        <div class="controls-side">
+          <label class="sr-only" for="sort-input">Sort missions</label>
+          <select id="sort-input" aria-label="Sort missions">
+            <option value="manual">Manual</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="dueSoon">Due Soon</option>
+            <option value="difficulty">Difficulty</option>
+            <option value="az">A-Z</option>
+          </select>
+
+          <label class="sr-only" for="search-input">Search missions</label>
+          <input id="search-input" type="search" placeholder="Search missions" />
         </div>
       </section>
 
-      <section class="list-panel">
-        <ul id="task-list" class="task-list" aria-live="polite"></ul>
-        <p id="empty-state" class="empty-state">No tasks yet. Add your first one above.</p>
+      <section class="board-grid">
+        <article class="panel board-panel main-board">
+          <div class="board-head">
+            <h2 class="section-title">Quest Board</h2>
+            <p id="reorder-hint" class="hint-text">Drag to reorder in Manual mode.</p>
+          </div>
+
+          <ul id="quest-list" class="quest-list" aria-live="polite"></ul>
+          <p id="empty-state" class="empty-state">No missions available. Create your first mission.</p>
+        </article>
+
+        <article class="panel board-panel compact">
+          <h2 class="section-title">Cleared Quests</h2>
+          <ul id="completed-list" class="quest-list compact-list" aria-live="polite"></ul>
+          <p id="completed-empty" class="empty-state">No cleared quests yet.</p>
+        </article>
+
+        <article class="panel board-panel compact achievements-panel">
+          <h2 class="section-title">Achievements</h2>
+          <ul id="achievement-list" class="achievement-list"></ul>
+        </article>
       </section>
 
-      <footer class="app-footer">
-        <p id="stats">0 tasks</p>
-        <button id="clear-completed" type="button" class="ghost-btn">Clear Completed</button>
+      <footer class="panel footer-panel">
+        <p id="footer-stats">0 active | 0 cleared | 0 overdue</p>
+        <div class="footer-actions">
+          <button id="mark-all-active" type="button" class="ghost-btn">Reset All</button>
+          <button id="mark-all-cleared" type="button" class="ghost-btn">Clear All</button>
+          <button id="clear-cleared" type="button" class="ghost-btn">Delete Cleared</button>
+        </div>
       </footer>
     </main>
 
-    <script src="./app.js" defer></script>
+    <aside id="toast-host" class="toast-host" aria-live="polite"></aside>
+    <div id="burst-host" class="burst-host" aria-hidden="true"></div>
+
+    <aside id="achievement-popup" class="achievement-popup" hidden>
+      <p class="module-tag">System Achievement Unlocked</p>
+      <h3 id="achievement-popup-title">Achievement</h3>
+      <p id="achievement-popup-desc">Description</p>
+    </aside>
+
+    <script type="module" src="./js/main.js"></script>
   </body>
 </html>
-
